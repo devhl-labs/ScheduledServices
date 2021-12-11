@@ -79,12 +79,9 @@ namespace ScheduledServices
             if (!_options.Value.Enabled)
                 return;
 
-            TimeSpan? delay = await GetDelayOrDefaultAsync(GetDelayBeforeExecutionAsync, _options.Value.DelayBeforeExecution, cancellationToken);
+            TimeSpan delay = await GetDelayOrDefaultAsync(GetDelayBeforeExecutionAsync, _options.Value.DelayBeforeExecution, cancellationToken);
 
-            if (delay == null)
-                return;
-
-            await DelayAsync(delay.Value, cancellationToken);
+            await DelayAsync(delay, cancellationToken);
 
             await SwallowAsync(DoWorkAsync, cancellationToken);
         }

@@ -23,12 +23,9 @@ namespace ScheduledServices
             if (!_options.Value.Enabled)
                 return;
 
-            TimeSpan? delay = await GetDelayOrDefaultAsync(GetDelayBeforeExecutionAsync, _options.Value.DelayBeforeExecution, cancellationToken);
+            TimeSpan delay = await GetDelayOrDefaultAsync(GetDelayBeforeExecutionAsync, _options.Value.DelayBeforeExecution, cancellationToken);
 
-            if (delay == null)
-                return;
-
-            await DelayAsync(delay.Value, cancellationToken);
+            await DelayAsync(delay, cancellationToken);
 
             while (_options.Value.Enabled && !cancellationToken.IsCancellationRequested)
             {
@@ -36,10 +33,7 @@ namespace ScheduledServices
 
                 delay = await GetDelayOrDefaultAsync(GetDelayBetweenExecutionsAsync, _options.Value.DelayBetweenExecutions, cancellationToken);
 
-                if (delay == null)
-                    continue;
-
-                await DelayAsync(delay.Value, cancellationToken);
+                await DelayAsync(delay, cancellationToken);
             }
         }
     }
