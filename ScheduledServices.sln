@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.31321.278
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ScheduledServices", "src\ScheduledServices\ScheduledServices.csproj", "{73DD68EB-6201-4A12-84C6-77FC583CEB18}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ScheduledServices.Test", "src\ScheduledServices.Test\ScheduledServices.Test.csproj", "{D278D958-FED1-4DB5-BCAA-D6854431CEB3}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{73DD68EB-6201-4A12-84C6-77FC583CEB18}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{73DD68EB-6201-4A12-84C6-77FC583CEB18}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{73DD68EB-6201-4A12-84C6-77FC583CEB18}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{73DD68EB-6201-4A12-84C6-77FC583CEB18}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D278D958-FED1-4DB5-BCAA-D6854431CEB3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D278D958-FED1-4DB5-BCAA-D6854431CEB3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D278D958-FED1-4DB5-BCAA-D6854431CEB3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D278D958-FED1-4DB5-BCAA-D6854431CEB3}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {798EC414-F208-45EC-9D7E-B47541F2DBBE}
+	EndGlobalSection
+EndGlobal
