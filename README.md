@@ -9,12 +9,14 @@ The example below shows how to configure your service to run one minute after st
 
 ## appsettings.json
 ```json
+{
   "Services": {
     "YourService": {
       "Enabled": true,
       "DelayBeforeExecution": "00:01:00.0",
       "DelayBetweenExecutions": "00:00:00.0"
-    },
+    }
+}
 ```
 
 ## Program.cs
