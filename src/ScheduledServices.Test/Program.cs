@@ -1,6 +1,9 @@
+using System.Runtime.CompilerServices;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using ScheduledBackgroundServices;
+using ScheduledServices.Services.Options;
 
 namespace ScheduledServices.Test
 {
@@ -19,10 +22,13 @@ namespace ScheduledServices.Test
                     services.AddHostedService<ScheduledWorker>();
 
                     services.Configure<RecurringWorkerOptions>(context.Configuration.GetSection($"Services:{typeof(RecurringWorker).Name}"));
-                    services.AddHostedSingletonService<RecurringWorker>();
+                    services.AddHostedSingleton<RecurringWorker>();
 
                     services.Configure<ScheduledWorkerOptions>(context.Configuration.GetSection($"Services:{typeof(MidnightWorker).Name}"));
-                    services.AddHostedSingletonService<MidnightWorker>();
+                    services.AddHostedSingleton<MidnightWorker>();
+
+                    // optionally configure a hosted service as a singleton while using options from Services:MidnightWorker
+                    services.AddHostedSingleton<MidnightWorker, MidnightWorkerOptions>(context.GetSection<MidnightWorker>());                    
                 });
     }
 }

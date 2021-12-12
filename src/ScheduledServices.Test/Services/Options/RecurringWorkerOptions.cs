@@ -1,11 +1,9 @@
 ﻿using System;
+using ScheduledServices.Services.Options;
 
 namespace ScheduledServices.Test
 {
-    public class RecurringWorkerOptions : IRecurringServiceOptions
+    public class RecurringWorkerOptions : RecurringServiceOptions
     {
-        public TimeSpan DelayBeforeExecution { get; set; }
-        public TimeSpan DelayBetweenExecutions { get; set; }
-        public bool Enabled { get; set; }
     }
 }
