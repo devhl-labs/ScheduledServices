@@ -42,6 +42,31 @@ namespace ScheduledBackgroundServices
         }
 
         /// <summary>
+        /// Adds a singleton service.
+        /// Configures your TService to use TOptions.
+        /// </summary>
+        /// <typeparam name="TService"></typeparam>
+        /// <typeparam name="TOptions"></typeparam>
+        /// <param name="services"></param>
+        /// <param name="config"></param>
+        /// <returns></returns>
+        public static IServiceCollection AddConfiguredService<TService, TOptions>(this IServiceCollection services, IConfigurationSection config, ServiceLifetime lifetime = ServiceLifetime.Singleton)
+            where TService : class
+            where TOptions : class
+        {
+            services.Configure<TOptions>(config);
+
+            if (lifetime == ServiceLifetime.Singleton)
+                services.AddSingleton<TService>();
+            else if (lifetime == ServiceLifetime.Transient)
+                services.AddTransient<TService>();
+            else if (lifetime == ServiceLifetime.Scoped)
+                services.AddScoped<TService>();
+            
+            return services;
+        }
+
+        /// <summary>
         /// Returns the configuration section from the appsettings for your service.
         /// Path defaults to Services:{typeof(TOptions).Name}
         /// </summary>
