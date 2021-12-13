@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using ScheduledServices;
 
 namespace ScheduledBackgroundServices
 {
@@ -13,7 +14,7 @@ namespace ScheduledBackgroundServices
         /// <param name="services"></param>
         /// <returns></returns>
         public static IServiceCollection AddHostedSingleton<TService>(this IServiceCollection services)
-            where TService : class, IHostedService
+            where TService : ToggledService
         {
             services.AddSingleton<TService>();
 
@@ -32,8 +33,8 @@ namespace ScheduledBackgroundServices
         /// <param name="config"></param>
         /// <returns></returns>
         public static IServiceCollection AddHostedSingleton<TService, TOptions>(this IServiceCollection services, IConfigurationSection config)
-            where TService : class, IHostedService
-            where TOptions : class
+            where TService : ToggledService
+            where TOptions : class, IToggledServiceOptions
         {
             services.Configure<TOptions>(config);
 
@@ -51,12 +52,12 @@ namespace ScheduledBackgroundServices
             => context.Configuration.GetSection(path);
 
         /// <summary>
-        /// Returns the configuration section from the appsettings for your service using appsettings path $"Services:{typeof(TOptions).Name}"
+        /// Returns the configuration section from the appsettings for your service using appsettings path $"Services:{typeof(TService).Name}"
         /// </summary>
-        /// <typeparam name="TOptions"></typeparam>
+        /// <typeparam name="TService"></typeparam>
         /// <param name="context"></param>
         /// <returns></returns>
-        public static IConfigurationSection GetSection<TOptions>(this HostBuilderContext context)
-            => context.Configuration.GetSection($"Services:{typeof(TOptions).Name}");
+        public static IConfigurationSection GetSection<TService>(this HostBuilderContext context) where TService : ToggledService
+            => context.Configuration.GetSection($"Services:{typeof(TService).Name}");
     }
 }

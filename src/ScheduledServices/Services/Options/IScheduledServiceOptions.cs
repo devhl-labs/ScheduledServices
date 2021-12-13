@@ -1,10 +1,10 @@
 ﻿using System;
+using ScheduledServices.Services.Options;
 
 namespace ScheduledServices
 {
-    public interface IScheduledServiceOptions
+    public interface IScheduledServiceOptions : IToggledServiceOptions
     {
         TimeSpan DelayBeforeExecution { get; set; }
-        bool Enabled { get; set; }
     }
 }

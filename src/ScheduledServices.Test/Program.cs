@@ -1,9 +1,6 @@
-using System.Runtime.CompilerServices;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using ScheduledBackgroundServices;
-using ScheduledServices.Services.Options;
 
 namespace ScheduledServices.Test
 {
@@ -28,7 +25,9 @@ namespace ScheduledServices.Test
                     services.AddHostedSingleton<MidnightWorker>();
 
                     // optionally configure a hosted service as a singleton while using options from Services:MidnightWorker
-                    services.AddHostedSingleton<MidnightWorker, MidnightWorkerOptions>(context.GetSection<MidnightWorker>());                    
+                    services.AddHostedSingleton<MidnightWorker, MidnightWorkerOptions>(context.GetSection<MidnightWorker>());
+
+                    services.AddHostedSingleton<StartupWorker, StartupWorkerOptions>(context.GetSection<StartupWorker>());
                 });
     }
 }

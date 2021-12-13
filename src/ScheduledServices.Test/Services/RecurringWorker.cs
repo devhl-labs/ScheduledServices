@@ -15,7 +15,7 @@ namespace ScheduledServices.Test
             _logger = logger;
         }
 
-        protected override async Task DoWorkAsync(CancellationToken cancellationToken)
+        protected override async Task ExecuteScheduledWorkAsync(CancellationToken cancellationToken)
         {
             _logger.LogInformation("The recurring service is executing.");
 

@@ -32,7 +32,7 @@ namespace ScheduledServices
 
             while (_options.Value.Enabled && !cancellationToken.IsCancellationRequested)
             {
-                await SwallowAsync(DoWorkAsync, cancellationToken);
+                await SwallowAsync(ExecuteScheduledWorkAsync, cancellationToken);
 
                 delay = await GetDelayOrDefaultAsync(GetDelayBetweenExecutionsAsync, _options.Value.DelayBetweenExecutions, cancellationToken);
 

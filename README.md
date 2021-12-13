@@ -2,8 +2,8 @@
 This is a simple library that makes it easy to manage the lifetime of your services.
 You can schedule a service to run after some delay, or to keep running with some delay between runs.
 
-To implement this, have your service inherit ScheduledService or RecurringService.
-Be sure to pass in an IOptions<IScheduledServiceOptions> or IOptions<IRecurringServiceOptions>.
+To implement this, have your service inherit ToggleService, ScheduledService, or RecurringService.
+Be sure to pass in an IOptions<IToggledServiceOptions>, IOptions<IScheduledServiceOptions> or IOptions<IRecurringServiceOptions>.
 You can also override GetDelayBeforeExecutionAsync or GetDelayBetweenExecutionsAsync if you need to compute the delay.
 The example below shows how to configure your service to run one minute after startup.
 
@@ -26,7 +26,11 @@ public static IHostBuilder CreateHostBuilder(string[] args) =>
         .ConfigureServices((context, services) =>
         {
             services.Configure<YourServiceOptions>(context.Configuration.GetSection($"Services:{typeof(YourService).Name}"));
-            services.AddHostedService<YourService>();
+            services.AddSingleton<YourService>();
+            services.AddHostedService(services => services.GetRequiredService<YourService>());
+
+            // or do it in one command
+            services.AddHostedSingleton<YourService, YourServiceOptions>(context.GetSection<YourService>());
         });
 ```
 
@@ -48,7 +52,7 @@ public class YourService : RecurringService
     {
     }
 
-    protected override async Task DoWorkAsync(CancellationToken cancellationToken)
+    protected override async Task ExecuteScheduledWorkAsync(CancellationToken cancellationToken)
     {
         // any async work
     }

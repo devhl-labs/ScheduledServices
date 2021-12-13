@@ -7,20 +7,16 @@ using Microsoft.Extensions.Options;
 
 namespace ScheduledServices
 {
-    public abstract class ScheduledService : BackgroundService
+    public abstract class ScheduledService : ToggledService
     {
-        internal readonly ILogger _logger;
         private readonly IOptions<IScheduledServiceOptions> _options;
 
 
-        public ScheduledService(ILogger logger, IOptions<IScheduledServiceOptions> options)
+        public ScheduledService(ILogger logger, IOptions<IScheduledServiceOptions> options) : base(logger, options)
         {
-            _logger = logger;
             _options = options;
         }
 
-
-        protected abstract Task DoWorkAsync(CancellationToken cancellationToken);
 
         protected virtual ValueTask<TimeSpan> GetDelayBeforeExecutionAsync(CancellationToken cancellationToken)
             => new(_options.Value.DelayBeforeExecution);
@@ -39,28 +35,10 @@ namespace ScheduledServices
             return timeSpan;
         }
 
-        protected virtual void OnExecutionError(Exception e, CancellationToken cancellationToken)
-        {
-            if (!cancellationToken.IsCancellationRequested)
-                _logger.LogError(e, "An exception occured while executing recurring service {0}", GetType().FullName);
-        }
-
         protected virtual void OnDelayError(Exception e, string name, CancellationToken cancellationToken)
         {
             if (!cancellationToken.IsCancellationRequested)
                 _logger.LogError(e, "An exception occured while executing {0} in recurring service {1}", name, GetType().FullName);
-        }
-
-        internal protected async Task SwallowAsync<T>(Func<CancellationToken, T> func, CancellationToken cancellationToken) where T : Task
-        {
-            try
-            {
-                await func(cancellationToken);
-            }
-            catch (Exception e)
-            {
-                OnExecutionError(e, cancellationToken);
-            }
         }
 
         internal protected static async Task DelayAsync(TimeSpan delay, CancellationToken cancellationToken)
@@ -86,7 +64,7 @@ namespace ScheduledServices
 
             await DelayAsync(delay, cancellationToken);
 
-            await SwallowAsync(DoWorkAsync, cancellationToken);
+            await SwallowAsync(ExecuteScheduledWorkAsync, cancellationToken);
         }
     }
 }
