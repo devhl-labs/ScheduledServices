@@ -14,7 +14,7 @@ namespace ScheduledBackgroundServices
         /// <param name="services"></param>
         /// <returns></returns>
         public static IServiceCollection AddHostedSingleton<TService>(this IServiceCollection services)
-            where TService : ToggledService
+            where TService : class, IHostedService
         {
             services.AddSingleton<TService>();
 
@@ -33,8 +33,8 @@ namespace ScheduledBackgroundServices
         /// <param name="config"></param>
         /// <returns></returns>
         public static IServiceCollection AddHostedSingleton<TService, TOptions>(this IServiceCollection services, IConfigurationSection config)
-            where TService : ToggledService
-            where TOptions : class, IToggledServiceOptions
+            where TService : class, IHostedService
+            where TOptions : class
         {
             services.Configure<TOptions>(config);
 
@@ -57,7 +57,7 @@ namespace ScheduledBackgroundServices
         /// <typeparam name="TService"></typeparam>
         /// <param name="context"></param>
         /// <returns></returns>
-        public static IConfigurationSection GetSection<TService>(this HostBuilderContext context) where TService : ToggledService
+        public static IConfigurationSection GetSection<TService>(this HostBuilderContext context)
             => context.Configuration.GetSection($"Services:{typeof(TService).Name}");
     }
 }
