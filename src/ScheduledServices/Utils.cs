@@ -62,7 +62,7 @@ namespace ScheduledBackgroundServices
                 services.AddTransient<TService>();
             else if (lifetime == ServiceLifetime.Scoped)
                 services.AddScoped<TService>();
-            
+
             return services;
         }
 
