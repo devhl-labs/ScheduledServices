@@ -38,6 +38,8 @@ public static IHostBuilder CreateHostBuilder(string[] args) => Host.CreateDefaul
 ```cs
 public class YourServiceOptions : IRecurringServiceOptions
 {
+    // implement the interface, or inherit RecurringServiceOptions
+
     public TimeSpan DelayBeforeExecution { get; set; }
     public TimeSpan DelayBetweenExecutions { get; set; }
     public bool Enabled { get; set; }
@@ -55,6 +57,7 @@ public class YourService : RecurringService
     protected override async Task ExecuteScheduledWorkAsync(CancellationToken cancellationToken)
     {
         // any async work
+        // errors will be logged and caught
     }
 
     protected override ValueTask<TimeSpan> GetDelayBeforeExecutionAsync(CancellationToken cancellationToken)
