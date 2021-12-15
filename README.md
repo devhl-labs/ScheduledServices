@@ -29,7 +29,7 @@ public static IHostBuilder CreateHostBuilder(string[] args) => Host.CreateDefaul
         services.AddHostedService(services => services.GetRequiredService<YourService>());
 
         // or do it in one command
-        // assumes the appsettings section is under "Services"
+        // assumes the appsettings section is under "Services" and called YourService
         services.AddHostedSingleton<YourService, YourServiceOptions>(context.GetSection<YourService>());
     });
 ```
