@@ -21,18 +21,17 @@ The example below shows how to configure your service to run one minute after st
 
 ## Program.cs
 ```cs
-public static IHostBuilder CreateHostBuilder(string[] args) =>
-    Host.CreateDefaultBuilder(args)
-        .ConfigureServices((context, services) =>
-        {
-            services.Configure<YourServiceOptions>(context.Configuration.GetSection($"Services:{typeof(YourService).Name}"));
-            services.AddSingleton<YourService>();
-            services.AddHostedService(services => services.GetRequiredService<YourService>());
+public static IHostBuilder CreateHostBuilder(string[] args) => Host.CreateDefaultBuilder(args)
+    .ConfigureServices((context, services) =>
+    {
+        services.Configure<YourServiceOptions>(context.Configuration.GetSection($"Services:{typeof(YourService).Name}"));
+        services.AddSingleton<YourService>();
+        services.AddHostedService(services => services.GetRequiredService<YourService>());
 
-            // or do it in one command
-            // assumes the appsettings section is under "Services"
-            services.AddHostedSingleton<YourService, YourServiceOptions>(context.GetSection<YourService>());
-        });
+        // or do it in one command
+        // assumes the appsettings section is under "Services"
+        services.AddHostedSingleton<YourService, YourServiceOptions>(context.GetSection<YourService>());
+    });
 ```
 
 ## Options
