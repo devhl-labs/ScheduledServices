@@ -3,7 +3,7 @@ This is a simple library that makes it easy to manage the lifetime of your servi
 You can schedule a service to run after some delay, or to keep running with some delay between runs.
 
 To implement this, have your service inherit ToggleService, ScheduledService, or RecurringService.
-Be sure to pass in an IOptions<IToggledServiceOptions>, IOptions<IScheduledServiceOptions> or IOptions<IRecurringServiceOptions>.
+Be sure to pass in an IOptions\<IToggledServiceOptions\>, IOptions\<IScheduledServiceOptions\> or IOptions\<IRecurringServiceOptions\>.
 You can also override GetDelayBeforeExecutionAsync or GetDelayBetweenExecutionsAsync if you need to compute the delay.
 The example below shows how to configure your service to run one minute after startup.
 
