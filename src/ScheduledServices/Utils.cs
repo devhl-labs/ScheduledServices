@@ -28,7 +28,7 @@ namespace ScheduledServices
         /// <typeparam name="TService"></typeparam>
         /// <param name="config"></param>
         /// <returns></returns>
-        public static IConfigurationSection GetSection<TService>(this IConfiguration config, string path = "Services:")
-            => config.GetSection($"{path}{typeof(TService).Name}");
+        public static IConfigurationSection GetSection<TService>(this IConfiguration config, string pathPrefix = "Services:")
+            => config.GetSection($"{pathPrefix}{typeof(TService).Name}");
     }
 }
