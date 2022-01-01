@@ -1,6 +1,6 @@
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using ScheduledBackgroundServices;
+using ScheduledServices;
 
 namespace ScheduledServices.Test
 {
@@ -15,19 +15,17 @@ namespace ScheduledServices.Test
             Host.CreateDefaultBuilder(args)
                 .ConfigureServices((context, services) =>
                 {
-                    services.Configure<ScheduledWorkerOptions>(context.Configuration.GetSection($"Services:{typeof(ScheduledWorker).Name}"));
-                    services.AddHostedService<ScheduledWorker>();
+                    services.Configure<ScheduledWorkerOptions>(context.Configuration.GetSection($"Services:{typeof(ScheduledWorker).Name}"))
+                        .AddHostedService<ScheduledWorker>();
 
-                    services.Configure<RecurringWorkerOptions>(context.Configuration.GetSection($"Services:{typeof(RecurringWorker).Name}"));
-                    services.AddHostedSingleton<RecurringWorker>();
+                    services.Configure<RecurringWorkerOptions>(context.Configuration.GetSection($"Services:{typeof(RecurringWorker).Name}"))
+                        .AddHostedService<RecurringWorker>();
 
-                    services.Configure<ScheduledWorkerOptions>(context.Configuration.GetSection($"Services:{typeof(MidnightWorker).Name}"));
-                    services.AddHostedSingleton<MidnightWorker>();
+                    services.Configure<MidnightWorkerOptions>(context.Configuration.GetSection<MidnightWorker>("Services:"))
+                        .AddHostedService<MidnightWorker>();
 
-                    // optionally configure a hosted service as a singleton while using options from Services:MidnightWorker
-                    services.AddHostedSingleton<MidnightWorker, MidnightWorkerOptions>(context.GetSection<MidnightWorker>());
-
-                    services.AddHostedSingleton<StartupWorker, StartupWorkerOptions>(context.GetSection<StartupWorker>());
+                    services.Configure<StartupWorkerOptions>(context.Configuration.GetSection<StartupWorker>())
+                        .AddHostedService<StartupWorker>();
                 });
     }
 }

@@ -8,8 +8,9 @@
     <RepositoryUrl>https://github.com/devhl-labs/ScheduledServices</RepositoryUrl>
     <Authors>devhl</Authors>
     <Product />
-    <Version>1.0.0-preview0.0.7</Version>
+    <Version>1.0.0-preview0.0.9</Version>
     <RepositoryType>git</RepositoryType>
+    <Description>Add background services that can be scheduled to start some time after start up or recurring at regular intervals.</Description>
   </PropertyGroup>
 
   <ItemGroup>

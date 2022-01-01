@@ -64,7 +64,8 @@ namespace ScheduledServices
 
             await DelayAsync(delay, cancellationToken);
 
-            await SwallowAsync(ExecuteScheduledWorkAsync, cancellationToken);
+            if (!cancellationToken.IsCancellationRequested)
+                await SwallowAsync(ExecuteScheduledWorkAsync, cancellationToken);
         }
     }
 }
