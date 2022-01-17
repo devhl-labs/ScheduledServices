@@ -32,16 +32,22 @@ namespace ScheduledServices
         /// <typeparam name="TService"></typeparam>
         /// <param name="config"></param>
         /// <returns></returns>
-        public static IConfigurationSection GetRequiredSection<TService>(this IConfiguration config, string? path) => config.GetRequiredSection($"{path}{typeof(TService).Name}");
+        public static IConfigurationSection GetRequiredSection<TService>(this IConfiguration config, string? path = null) => config.GetRequiredSection($"{path}{typeof(TService).Name}");
 
         /// <summary>
         /// Returns the configuration section from the appsettings for your service.
-        /// Assumes the path is the value provided in ConfigureScheduledServices
+        /// Assumes the path is the value provided in ConfigureScheduledServices or AddScheduledServices
         /// </summary>
         /// <typeparam name="TService"></typeparam>
         /// <param name="config"></param>
         /// <returns></returns>
-        public static IConfigurationSection GetRequiredSection<TService>(this IConfiguration config) => config.GetRequiredSection<TService>(_path);
+        public static IConfigurationSection GetServicesSection<TService>(this IConfiguration config)
+        {
+            if (string.IsNullOrWhiteSpace(_path))
+                throw new Exception("The path must be provided either in the method or when configuring ScheduledServices.");
+
+            return config.GetRequiredSection<TService>(_path);
+        }
 
         /// <summary>
         /// Configures your service to use a section from the IConfiguration.
@@ -59,6 +65,9 @@ namespace ScheduledServices
             where TToggledService : ToggledService
             where TToggledServiceOptions : class, IToggledServiceOptions
         {
+            if (configuration == null)
+                throw new Exception("IConfiguration was not provided. Provide it by configuring the ScheduledServices library or with the method overload.");
+
             services.Configure<TToggledServiceOptions>(configuration.GetRequiredSection<TToggledService>(path));
 
             return services;
@@ -80,7 +89,7 @@ namespace ScheduledServices
             where TToggledService : ToggledService
             where TToggledServiceOptions : class, IToggledServiceOptions
         {
-            services.Configure<TToggledServiceOptions>(configuration.GetRequiredSection<TToggledService>(_path));
+            services.Configure<TToggledServiceOptions>(configuration.GetServicesSection<TToggledService>());
 
             return services;
         }
@@ -94,14 +103,10 @@ namespace ScheduledServices
         /// <returns></returns>
         /// <exception cref="Exception"></exception>
         public static IServiceCollection ConfigureScheduledService<TToggledService, TToggledServiceOptions>(this IServiceCollection services)
-            where TToggledService : ToggledService
-            where TToggledServiceOptions : class, IToggledServiceOptions
-        {
-            if (_configuration == null)
-                throw new Exception("IConfiguration was not provided. Provide it by configuring the ScheduledServices library or with the method overload.");
-
-            return ConfigureScheduledService<TToggledService, TToggledServiceOptions>(services, _configuration, _path);
-        }
+                where TToggledService : ToggledService
+                where TToggledServiceOptions : class, IToggledServiceOptions
+            => ConfigureScheduledService<TToggledService, TToggledServiceOptions>(services, _configuration!, _path);
+        
 
         private static void AddScheduledServices(ScheduledServicesConfiguration scheduledServicesConfiguration)
         {
