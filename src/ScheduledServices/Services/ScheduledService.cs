@@ -55,17 +55,14 @@ namespace ScheduledServices
         protected override async Task ExecuteAsync(CancellationToken cancellationToken)
         {
             if (!_options.Value.Enabled)
-            {
-                _logger.LogWarning("{0} Service is disabled!", GetType().FullName);
                 return;
-            }
 
             TimeSpan delay = await GetDelayOrDefaultAsync(GetDelayBeforeExecutionAsync, _options.Value.DelayBeforeExecution, cancellationToken);
 
             await DelayAsync(delay, cancellationToken);
 
             if (!cancellationToken.IsCancellationRequested)
-                await SwallowAsync(ExecuteScheduledWorkAsync, cancellationToken);
+                await SwallowAsync(ExecuteScheduledTaskAsync, cancellationToken);
         }
     }
 }

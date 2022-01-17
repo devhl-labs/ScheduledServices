@@ -6,18 +6,18 @@ using Microsoft.Extensions.Options;
 
 namespace ScheduledServices.Test
 {
-    public class ScheduledWorker : ScheduledService
+    public class DelayedService : ScheduledService
     {
-        private readonly ILogger<ScheduledWorker> _logger;
+        private readonly ILogger<DelayedService> _logger;
 
-        public ScheduledWorker(ILogger<ScheduledWorker> logger, IOptions<ScheduledWorkerOptions> options) : base(logger, options)
+        public DelayedService(ILogger<DelayedService> logger, IOptions<DelayedServiceOptions> options) : base(logger, options)
         {
             _logger = logger;
         }
 
-        protected override async Task ExecuteScheduledWorkAsync(CancellationToken cancellationToken)
+        protected override async Task ExecuteScheduledTaskAsync(CancellationToken cancellationToken)
         {
-            _logger.LogInformation("The scheduled service is executing.");
+            _logger.LogInformation("The delayed service is executing.");
 
             // any async work
             await Task.Delay(TimeSpan.FromSeconds(5), cancellationToken);

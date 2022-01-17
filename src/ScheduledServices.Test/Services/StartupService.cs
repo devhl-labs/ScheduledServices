@@ -6,16 +6,16 @@ using Microsoft.Extensions.Options;
 
 namespace ScheduledServices.Test
 {
-    public class StartupWorker : ToggledService
+    public class StartupService : ToggledService
     {
-        private readonly ILogger<ScheduledWorker> _logger;
+        private readonly ILogger<StartupService> _logger;
 
-        public StartupWorker(ILogger<ScheduledWorker> logger, IOptions<StartupWorkerOptions> options) : base(logger, options)
+        public StartupService(ILogger<StartupService> logger, IOptions<StartupServiceOptions> options) : base(logger, options)
         {
             _logger = logger;
         }
 
-        protected override async Task ExecuteScheduledWorkAsync(CancellationToken cancellationToken)
+        protected override async Task ExecuteScheduledTaskAsync(CancellationToken cancellationToken)
         {
             _logger.LogInformation("The startup service is executing.");
 

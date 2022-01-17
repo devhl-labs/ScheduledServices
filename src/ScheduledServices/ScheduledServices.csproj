@@ -8,10 +8,13 @@
     <RepositoryUrl>https://github.com/devhl-labs/ScheduledServices</RepositoryUrl>
     <Authors>devhl</Authors>
     <Product />
-    <Version>1.0.0-preview0.0.10</Version>
+    <Version>1.0.0-preview0.0.11</Version>
     <RepositoryType>git</RepositoryType>
     <Description>Add background services that can be scheduled to start some time after start up or recurring at regular intervals.</Description>
     <PackageProjectUrl>https://github.com/devhl-labs/ScheduledServices</PackageProjectUrl>
+    <PackageTags>BackgroundService worker service hosted</PackageTags>
+    <Copyright>2022</Copyright>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
   </PropertyGroup>
 
   <ItemGroup>
@@ -23,6 +26,10 @@
     <None Include="..\..\LICENSE">
       <Pack>True</Pack>
       <PackagePath></PackagePath>
+    </None>
+    <None Include="..\..\README.md">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
     </None>
   </ItemGroup>
 

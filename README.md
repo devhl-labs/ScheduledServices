@@ -1,10 +1,10 @@
 # ScheduledServices
-This is a simple library that makes it easy to manage the lifetime of your services.
-You can schedule a service to run after some delay, or to keep running with some delay between runs.
+This is a simple library that makes it easy to schedule your services.
+You can schedule a service to run after a delay, or to keep running with some delay between runs.
 
 To implement this, have your service inherit ToggleService, ScheduledService, or RecurringService.
 You can also override GetDelayBeforeExecutionAsync or GetDelayBetweenExecutionsAsync if you need to compute the delay.
-The example below shows how to configure your service to run one minute after startup.
+The example below shows how to configure your service to run one minute after startup and keep running every minute.
 
 ## appsettings.json
 ```json
@@ -13,7 +13,7 @@ The example below shows how to configure your service to run one minute after st
     "YourService": {
       "Enabled": true,
       "DelayBeforeExecution": "00:01:00.0",
-      "DelayBetweenExecutions": "00:00:00.0"
+      "DelayBetweenExecutions": "00:01:00.0"
     }
 }
 ```
@@ -21,16 +21,20 @@ The example below shows how to configure your service to run one minute after st
 ## Program.cs
 ```cs
 public static IHostBuilder CreateHostBuilder(string[] args) => Host.CreateDefaultBuilder(args)
+    .ConfigureScheduledServices((host, scheduledServicesConfiguration) =>
+    {
+        scheduledServicesConfiguration.Configuration = host.Configuration;
+        scheduledServicesConfiguration.Path = "Services:";
+    })
     .ConfigureServices((context, services) =>
     {
+        // schedules a service with no extension methods
         services.Configure<YourServiceOptions>(context.Configuration.GetSection($"Services:{typeof(YourService).Name}"));
-            .AddSingleton<YourService>();
+            .AddSingleton<YourService>()
             .AddHostedService(services => services.GetRequiredService<YourService>());
 
-        // optionally use the GetSection extension method. This assumes the section is at Services:YourService
-        services.Configure<YourServiceOptions>(context.Configuration.GetSection<YourService>())
-            // adds a singleton and a hosted service in one method
-            .AddHostedSingleton<YourService>();
+        // schedules a service using provided extension methods
+        services.ConfigureScheduledService<YourService, YourServiceOptions>().AddHostedSingleton<YourService>();
     });
 ```
 
@@ -54,7 +58,7 @@ public class YourService : RecurringService
     {
     }
 
-    protected override async Task ExecuteScheduledWorkAsync(CancellationToken cancellationToken)
+    protected override async Task ExecuteScheduledTaskAsync(CancellationToken cancellationToken)
     {
         // any async work
         // errors will be logged

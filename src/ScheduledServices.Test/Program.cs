@@ -1,6 +1,5 @@
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using ScheduledServices;
 
 namespace ScheduledServices.Test
 {
@@ -13,19 +12,21 @@ namespace ScheduledServices.Test
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>
             Host.CreateDefaultBuilder(args)
+                .ConfigureScheduledServices((host, scheduledServicesConfiguration) =>
+                {
+                    scheduledServicesConfiguration.Configuration = host.Configuration;
+                    scheduledServicesConfiguration.Path = "Services:";
+                })
                 .ConfigureServices((context, services) =>
                 {
-                    services.Configure<ScheduledWorkerOptions>(context.Configuration.GetSection($"Services:{typeof(ScheduledWorker).Name}"))
-                        .AddHostedService<ScheduledWorker>();
+                    // scheduling a service without any extension methods
+                    services.Configure<DelayedServiceOptions>(context.Configuration.GetSection($"Services:{typeof(DelayedService).Name}"))
+                        .AddHostedService<DelayedService>();
 
-                    services.Configure<RecurringWorkerOptions>(context.Configuration.GetSection($"Services:{typeof(RecurringWorker).Name}"))
-                        .AddHostedService<RecurringWorker>();
-
-                    services.Configure<MidnightWorkerOptions>(context.Configuration.GetSection<MidnightWorker>("Services:"))
-                        .AddHostedService<MidnightWorker>();
-
-                    services.Configure<StartupWorkerOptions>(context.Configuration.GetSection<StartupWorker>())
-                        .AddHostedService<StartupWorker>();
+                    // schedule services using provided extension method
+                    services.ConfigureScheduledService<MinuteService, MinuteServiceOptions>().AddHostedService<MinuteService>();
+                    services.ConfigureScheduledService<MidnightService, MidnightServiceOptions>().AddHostedService<MidnightService>();
+                    services.ConfigureScheduledService<StartupService, StartupServiceOptions>().AddHostedService<StartupService>();
                 });
     }
 }

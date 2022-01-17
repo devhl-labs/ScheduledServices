@@ -6,16 +6,16 @@ using Microsoft.Extensions.Options;
 
 namespace ScheduledServices.Test
 {
-    public class MidnightWorker : ScheduledService
+    public class MidnightService : ScheduledService
     {
-        private readonly ILogger<ScheduledWorker> _logger;
+        private readonly ILogger<MidnightService> _logger;
 
-        public MidnightWorker(ILogger<ScheduledWorker> logger, IOptions<ScheduledWorkerOptions> options) : base(logger, options)
+        public MidnightService(ILogger<MidnightService> logger, IOptions<MidnightServiceOptions> options) : base(logger, options)
         {
             _logger = logger;
         }
 
-        protected override async Task ExecuteScheduledWorkAsync(CancellationToken cancellationToken)
+        protected override async Task ExecuteScheduledTaskAsync(CancellationToken cancellationToken)
         {
             _logger.LogInformation("The midnight service is executing.");
 

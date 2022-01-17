@@ -4,7 +4,6 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using ScheduledServices.Services.Options;
 
 namespace ScheduledServices
 {
@@ -18,10 +17,13 @@ namespace ScheduledServices
         {
             _logger = logger;
             _options = options;
+
+            if (!_options.Value.Enabled)
+                _logger.LogWarning("{0} Service is disabled!", GetType().FullName);
         }
 
 
-        protected abstract Task ExecuteScheduledWorkAsync(CancellationToken cancellationToken);
+        protected abstract Task ExecuteScheduledTaskAsync(CancellationToken cancellationToken);
 
         protected virtual void OnExecutionError(Exception e, CancellationToken cancellationToken)
         {
@@ -44,12 +46,9 @@ namespace ScheduledServices
         protected override async Task ExecuteAsync(CancellationToken cancellationToken)
         {
             if (!_options.Value.Enabled)
-            {
-                _logger.LogWarning("{0} Service is disabled!", GetType().FullName);
                 return;
-            }
 
-            await SwallowAsync(ExecuteScheduledWorkAsync, cancellationToken);
+            await SwallowAsync(ExecuteScheduledTaskAsync, cancellationToken);
         }
     }
 }

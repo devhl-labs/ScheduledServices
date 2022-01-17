@@ -6,18 +6,18 @@ using Microsoft.Extensions.Options;
 
 namespace ScheduledServices.Test
 {
-    public class RecurringWorker : RecurringService
+    public class MinuteService : RecurringService
     {
-        private readonly ILogger<RecurringWorker> _logger;
+        private readonly ILogger<MinuteService> _logger;
 
-        public RecurringWorker(ILogger<RecurringWorker> logger, IOptions<RecurringWorkerOptions> options) : base(logger, options)
+        public MinuteService(ILogger<MinuteService> logger, IOptions<MinuteServiceOptions> options) : base(logger, options)
         {
             _logger = logger;
         }
 
-        protected override async Task ExecuteScheduledWorkAsync(CancellationToken cancellationToken)
+        protected override async Task ExecuteScheduledTaskAsync(CancellationToken cancellationToken)
         {
-            _logger.LogInformation("The recurring service is executing.");
+            _logger.LogInformation("The minute service is executing.");
 
             // any async work
             await Task.Delay(TimeSpan.FromSeconds(5), cancellationToken);

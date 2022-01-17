@@ -3,7 +3,7 @@ using ScheduledServices.Services.Options;
 
 namespace ScheduledServices.Test
 {
-    public class MidnightWorkerOptions : ScheduledServiceOptions
+    public class StartupServiceOptions : ToggledServiceOptions
     {
     }
 }
