@@ -38,9 +38,9 @@ public static IHostBuilder CreateHostBuilder(string[] args) => Host.CreateDefaul
 
         // configuration of non-scheduled services can still use these extension methods
         // this one will use Any:Path:Here:YourService
-        services.Configure<YourServiceOptions>()context.Configuration.GetRequiredSection<YourService>("Any:Path:Here:"));
+        services.Configure<YourServiceOptions>(context.Configuration.GetRequiredSection<YourService>("Any:Path:Here:"));
         // this one will use Services:YourService where Services: is the path you passed in at ConfigureScheduledServices
-        services.Configure<YourServiceOptions>()context.Configuration.GetServiceSection<YourService>());
+        services.Configure<YourServiceOptions>(context.Configuration.GetServiceSection<YourService>());
     });
 ```
 
