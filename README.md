@@ -29,7 +29,7 @@ public static IHostBuilder CreateHostBuilder(string[] args) => Host.CreateDefaul
     .ConfigureServices((context, services) =>
     {
         // schedules a service with no extension methods
-        services.Configure<YourServiceOptions>(context.Configuration.GetSection($"Services:{typeof(YourService).Name}"));
+        services.Configure<YourServiceOptions>(context.Configuration.GetRequiredSection($"Services:{typeof(YourService).Name}"));
             .AddSingleton<YourService>()
             .AddHostedService(services => services.GetRequiredService<YourService>());
 

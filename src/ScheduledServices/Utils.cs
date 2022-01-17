@@ -27,20 +27,21 @@ namespace ScheduledServices
         }
 
         /// <summary>
-        /// Returns the configuration section from the appsettings for your service using appsettings path $"Services:{typeof(TService).Name}"
+        /// Returns the configuration section from the appsettings for your service using appsettings path $"{path}{typeof(TService).Name}"
         /// </summary>
         /// <typeparam name="TService"></typeparam>
         /// <param name="config"></param>
         /// <returns></returns>
-        public static IConfigurationSection GetSection<TService>(this IConfiguration config, string? path) => config.GetSection($"{path}{typeof(TService).Name}");
+        public static IConfigurationSection GetRequiredSection<TService>(this IConfiguration config, string? path) => config.GetRequiredSection($"{path}{typeof(TService).Name}");
 
         /// <summary>
-        /// Returns the configuration section from the appsettings for your service using appsettings path $"Services:{typeof(TService).Name}"
+        /// Returns the configuration section from the appsettings for your service.
+        /// Assumes the path is the value provided in ConfigureScheduledServices
         /// </summary>
         /// <typeparam name="TService"></typeparam>
         /// <param name="config"></param>
         /// <returns></returns>
-        public static IConfigurationSection GetSection<TService>(this IConfiguration config) => config.GetSection<TService>(_path);
+        public static IConfigurationSection GetRequiredSection<TService>(this IConfiguration config) => config.GetRequiredSection<TService>(_path);
 
         /// <summary>
         /// Configures your service to use a section from the IConfiguration.
@@ -58,7 +59,7 @@ namespace ScheduledServices
             where TToggledService : ToggledService
             where TToggledServiceOptions : class, IToggledServiceOptions
         {
-            services.Configure<TToggledServiceOptions>(configuration.GetSection<TToggledService>(path));
+            services.Configure<TToggledServiceOptions>(configuration.GetRequiredSection<TToggledService>(path));
 
             return services;
         }
@@ -79,7 +80,7 @@ namespace ScheduledServices
             where TToggledService : ToggledService
             where TToggledServiceOptions : class, IToggledServiceOptions
         {
-            services.Configure<TToggledServiceOptions>(configuration.GetSection<TToggledService>(_path));
+            services.Configure<TToggledServiceOptions>(configuration.GetRequiredSection<TToggledService>(_path));
 
             return services;
         }

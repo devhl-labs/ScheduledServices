@@ -1,5 +1,6 @@
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Configuration;
 
 namespace ScheduledServices.Test
 {
@@ -20,7 +21,7 @@ namespace ScheduledServices.Test
                 .ConfigureServices((context, services) =>
                 {
                     // scheduling a service without any extension methods
-                    services.Configure<DelayedServiceOptions>(context.Configuration.GetSection($"Services:{typeof(DelayedService).Name}"))
+                    services.Configure<DelayedServiceOptions>(context.Configuration.GetRequiredSection($"Services:{typeof(DelayedService).Name}"))
                         .AddHostedService<DelayedService>();
 
                     // schedule services using provided extension method
