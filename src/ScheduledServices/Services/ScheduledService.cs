@@ -38,7 +38,7 @@ namespace ScheduledServices
         protected virtual void OnDelayError(Exception e, string name, CancellationToken cancellationToken)
         {
             if (!cancellationToken.IsCancellationRequested)
-                _logger.LogError(e, "An exception occured while executing {0} in recurring service {1}", name, GetType().FullName);
+                _logger.LogError(e, "An exception occured while executing {name} in recurring service {name}", name, GetType().Name);
         }
 
         internal protected static async Task DelayAsync(TimeSpan delay, CancellationToken cancellationToken)

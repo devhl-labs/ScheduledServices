@@ -19,7 +19,7 @@ namespace ScheduledServices
             _options = options;
 
             if (!_options.Value.Enabled)
-                _logger.LogWarning("{0} Service is disabled!", GetType().FullName);
+                _logger.LogWarning("{name} Service is disabled!", GetType().Name);
         }
 
 
@@ -28,7 +28,7 @@ namespace ScheduledServices
         protected virtual void OnExecutionError(Exception e, CancellationToken cancellationToken)
         {
             if (!cancellationToken.IsCancellationRequested)
-                _logger.LogError(e, "An exception occured while executing recurring service {0}", GetType().FullName);
+                _logger.LogError(e, "An exception occured while executing recurring service {name}", GetType().Name);
         }
 
         internal protected async Task SwallowAsync<T>(Func<CancellationToken, T> func, CancellationToken cancellationToken) where T : Task
@@ -49,6 +49,28 @@ namespace ScheduledServices
                 return;
 
             await SwallowAsync(ExecuteScheduledTaskAsync, cancellationToken);
+        }
+
+        protected virtual void AfterStopped()
+        {
+            _logger.LogInformation("Stopped {name}", GetType().Name);
+        }
+
+        public override async Task StopAsync(CancellationToken cancellationToken)
+        {
+            await base.StopAsync(cancellationToken);
+            AfterStopped();
+        }
+
+        protected virtual void AfterStarted()
+        {
+            _logger.LogInformation("Started {name}", GetType().Name);
+        }
+
+        public override async Task StartAsync(CancellationToken cancellationToken)
+        {
+            await base.StartAsync(cancellationToken);
+            AfterStarted();
         }
     }
 }
