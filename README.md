@@ -21,12 +21,7 @@ The example below shows how to configure your service to run one minute after st
 ## Program.cs
 ```cs
 public static IHostBuilder CreateHostBuilder(string[] args) => Host.CreateDefaultBuilder(args)
-    .ConfigureScheduledServices((host, scheduledServicesConfiguration) =>
-    {
-        scheduledServicesConfiguration.Configuration = host.Configuration;
-        scheduledServicesConfiguration.Path = "Services:";
-    })
-    .ConfigureServices((context, services) =>
+    .ConfigureScheduledServices((host, services) =>
     {
         // schedules a service with no extension methods
         services.Configure<YourServiceOptions>(context.Configuration.GetRequiredSection($"Services:{typeof(YourService).Name}"));
@@ -34,13 +29,14 @@ public static IHostBuilder CreateHostBuilder(string[] args) => Host.CreateDefaul
             .AddHostedService(services => services.GetRequiredService<YourService>());
 
         // schedules a service using provided extension methods
-        services.ConfigureScheduledService<YourService, YourServiceOptions>().AddHostedSingleton<YourService>();
+        services.AddScheduledService<YourService, YourServiceOptions>().AddHostedSingleton<YourService>();
 
         // configuration of non-scheduled services can still use these extension methods
         // this one will use Any:Path:Here:YourService
-        services.Configure<YourServiceOptions>(context.Configuration.GetRequiredSection<YourService>("Any:Path:Here:"));
-        // this one will use Services:YourService where Services: is the path you passed in at ConfigureScheduledServices
-        services.Configure<YourServiceOptions>(context.Configuration.GetServiceSection<YourService>());
+        services.Configure<YourServiceOptions>(context.Configuration.GetCustomSection<YourService>("Any:Path:Here:"));
+
+        // this one will use Services:YourService
+        services.Configure<YourServiceOptions>(context.Configuration.GetServicesSection<YourService>());
     });
 ```
 
@@ -66,13 +62,21 @@ public class YourService : RecurringService
 
     protected override async Task ExecuteScheduledTaskAsync(CancellationToken cancellationToken)
     {
-        // any async work
-        // errors will be logged
+        // Errors will be logged. They will not crash the program, nor prevent recurring services from running again.
+        // To change this behaviour, override OnExecutionError.
     }
 
     protected override ValueTask<TimeSpan> GetDelayBeforeExecutionAsync(CancellationToken cancellationToken)
     {
-        // optionally you can compute the delay here
+        // Optionally you can compute the delay here.
+        // This controls when the service FIRST executes after the program starts.
+        // It overrides whatever value is in the IConfiguration.
+    }
+
+    protected override ValueTask<TimeSpan> GetDelayBetweenExecutionAsync(CancellationToken cancellationToken)
+    {
+        // This controls the delay BETWEEN executions in a recurring service.
+        // It overrides whatever value is in the IConfiguration.
     }
 }
 ```
