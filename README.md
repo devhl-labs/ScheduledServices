@@ -72,7 +72,8 @@ public class YourService : RecurringService
 
     protected override async Task ExecuteScheduledTaskAsync(CancellationToken cancellationToken)
     {
-        // Errors will be logged. They will not crash the program, nor prevent recurring services from running again.
+        // Errors will be logged. They will not crash the program, 
+        // nor prevent recurring services from running again.
         // To change this behaviour, override OnExecutionError.
     }
 
