@@ -70,13 +70,13 @@ public class YourService : RecurringService
     {
         // Optionally you can compute the delay here.
         // This controls when the service FIRST executes after the program starts.
-        // It overrides whatever value is in the IConfiguration.
+        // It overrides DelayBeforeExecution from the IConfiguration.
     }
 
     protected override ValueTask<TimeSpan> GetDelayBetweenExecutionAsync(CancellationToken cancellationToken)
     {
         // This controls the delay BETWEEN executions in a recurring service.
-        // It overrides whatever value is in the IConfiguration.
+        // It overrides DelayBetweenExecutions from the IConfiguration
     }
 }
 ```
