@@ -2,8 +2,18 @@
 This is a simple library that makes it easy to schedule your services.
 You can schedule a service to run after a delay, or to keep running with some delay between runs.
 
+There are three classes provided:
+## ToggledService
+Inherits BackgroundService. This gives you the ability to toggle the service on or off.
+
+## ScheduledService
+Inherits ToggledService. This gives you the ability to schedule a single execution at a fixed or computed date after the program starts. This will only execute one time.
+
+## RecurringService
+Inherits ScheduledService. This will execute forever by default, with a delay between executions. You can set the delay between executions in appsettings or compute it in code.
+
+# See it in action
 To implement this, have your service inherit ToggleService, ScheduledService, or RecurringService.
-You can also override GetDelayBeforeExecutionAsync or GetDelayBetweenExecutionsAsync if you need to compute the delay.
 The example below shows how to configure your service to run one minute after startup and keep running every minute.
 
 ## appsettings.json
