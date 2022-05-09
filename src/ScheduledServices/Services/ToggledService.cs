@@ -53,7 +53,7 @@ namespace ScheduledServices
 
         protected virtual void AfterStopped()
         {
-            _logger.LogInformation("Stopped {name}", GetType().Name);
+            _logger.LogInformation("{event} {name}", "Stopped", GetType().Name);
         }
 
         public override async Task StopAsync(CancellationToken cancellationToken)
@@ -64,7 +64,7 @@ namespace ScheduledServices
 
         protected virtual void AfterStarted()
         {
-            _logger.LogInformation("Started {name}", GetType().Name);
+            _logger.LogInformation("{event} {name}", "Started", GetType().Name);
         }
 
         public override async Task StartAsync(CancellationToken cancellationToken)
