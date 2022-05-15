@@ -21,13 +21,16 @@ namespace ScheduledServices.Test
                         .AddHostedService<DelayedService>();
 
                     // use GetRequiredSection<T> to configure your service with a custom path such as CustomPath:MidnightService
-                    services.Configure<MidnightServiceOptions>(context.Configuration.GetCustomSection<MidnightService>("Services:")).AddHostedService<MidnightService>();
+                    services.Configure<MidnightServiceOptions>(context.Configuration.GetCustomSection<MidnightService>("Services:"))
+                        .AddHostedService<MidnightService>();
 
                     // use GetServicesSection<T> to configure your service using Services:MinuteService
-                    services.Configure<MinuteServiceOptions>(context.Configuration.GetServicesSection<MinuteService>()).AddHostedService<MinuteService>();
+                    services.Configure<MinuteServiceOptions>(context.Configuration.GetServicesSection<MinuteService>())
+                        .AddHostedService<MinuteService>();
 
                     // schedule your service using Services:StartupService
-                    services.AddScheduledService<StartupService, StartupServiceOptions>().AddHostedService<StartupService>();
+                    services.ConfigureScheduledService<StartupService, StartupServiceOptions>()
+                        .AddHostedService<StartupService>();
                 });
     }
 }

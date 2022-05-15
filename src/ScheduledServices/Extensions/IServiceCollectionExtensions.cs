@@ -18,7 +18,7 @@ namespace ScheduledServices.Extensions
         /// <param name="services"></param>
         /// <param name="configuration"></param>
         /// <returns></returns>
-        public static IServiceCollection AddScheduledServices(this IServiceCollection services, IConfiguration configuration)
+        public static IServiceCollection ConfigureScheduledServices(this IServiceCollection services, IConfiguration configuration)
         {
             Configuration = configuration;
 
@@ -33,7 +33,7 @@ namespace ScheduledServices.Extensions
         /// <param name="services"></param>
         /// <param name="path"></param>
         /// <returns></returns>
-        public static IServiceCollection AddScheduledService<TToggledService, TToggledServiceOptions>(
+        public static IServiceCollection ConfigureScheduledService<TToggledService, TToggledServiceOptions>(
             this IServiceCollection services, string? path = "Services:")
                 where TToggledService : ToggledService
                 where TToggledServiceOptions : class, IToggledServiceOptions

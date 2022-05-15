@@ -39,7 +39,7 @@ public static IHostBuilder CreateHostBuilder(string[] args) => Host.CreateDefaul
             .AddHostedService(services => services.GetRequiredService<YourService>());
 
         // schedules a service using provided extension methods
-        services.AddScheduledService<YourService, YourServiceOptions>().AddHostedSingleton<YourService>();
+        services.ConfigureScheduledService<YourService, YourServiceOptions>().AddHostedSingleton<YourService>();
 
         // configuration of non-scheduled services can still use these extension methods
         // this one will use Any:Path:Here:YourService
