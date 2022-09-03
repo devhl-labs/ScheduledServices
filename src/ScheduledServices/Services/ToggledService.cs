@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using ScheduledServices.Services.Metadata;
 
 namespace ScheduledServices
 {
@@ -12,6 +13,7 @@ namespace ScheduledServices
         internal readonly ILogger _logger;
         private readonly IOptions<IToggledServiceOptions> _options;
 
+        public Metadata Metadata { get; } = new();
 
         public ToggledService(ILogger logger, IOptions<IToggledServiceOptions> options)
         {
@@ -33,19 +35,26 @@ namespace ScheduledServices
 
         internal protected async Task SwallowAsync<T>(Func<CancellationToken, T> func, CancellationToken cancellationToken) where T : Task
         {
+            Metadata.Start = DateTime.UtcNow;
+
             try
             {
                 await func(cancellationToken);
+                Metadata.Successes++;
             }
             catch (Exception e)
             {
+                Metadata.Failures++;
+                Metadata.Exception = e;
                 OnExecutionError(e, cancellationToken);
             }
+
+            Metadata.Stop = DateTime.UtcNow;
         }
 
         protected override async Task ExecuteAsync(CancellationToken cancellationToken)
         {
-            if (!_options.Value.Enabled)
+            if (!_options.Value.Enabled || cancellationToken.IsCancellationRequested)
                 return;
 
             await SwallowAsync(ExecuteScheduledTaskAsync, cancellationToken);

@@ -20,18 +20,11 @@ namespace ScheduledServices
 
         protected override async Task ExecuteAsync(CancellationToken cancellationToken)
         {
-            if (!_options.Value.Enabled)
-                return;
-
-            TimeSpan delay = await GetDelayOrDefaultAsync(GetDelayBeforeExecutionAsync, _options.Value.DelayBeforeExecution, cancellationToken);
-
-            await DelayAsync(delay, cancellationToken);
-
             while (_options.Value.Enabled && !cancellationToken.IsCancellationRequested)
             {
-                await SwallowAsync(ExecuteScheduledTaskAsync, cancellationToken);
+                await base.ExecuteAsync(cancellationToken);
 
-                delay = await GetDelayOrDefaultAsync(GetDelayBetweenExecutionsAsync, _options.Value.DelayBetweenExecutions, cancellationToken);
+                TimeSpan delay = await GetDelayOrDefaultAsync(GetDelayBetweenExecutionsAsync, _options.Value.DelayBetweenExecutions, cancellationToken);
 
                 await DelayAsync(delay, cancellationToken);
             }

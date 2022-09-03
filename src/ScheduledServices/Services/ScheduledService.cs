@@ -53,15 +53,14 @@ namespace ScheduledServices
 
         protected override async Task ExecuteAsync(CancellationToken cancellationToken)
         {
-            if (!_options.Value.Enabled)
+            if (!_options.Value.Enabled || cancellationToken.IsCancellationRequested)
                 return;
 
             TimeSpan delay = await GetDelayOrDefaultAsync(GetDelayBeforeExecutionAsync, _options.Value.DelayBeforeExecution, cancellationToken);
 
             await DelayAsync(delay, cancellationToken);
 
-            if (!cancellationToken.IsCancellationRequested)
-                await SwallowAsync(ExecuteScheduledTaskAsync, cancellationToken);
+            await base.ExecuteAsync(cancellationToken);
         }
     }
 }
