@@ -52,16 +52,13 @@ namespace ScheduledServices
             Metadata.Stop = DateTime.UtcNow;
         }
 
-        protected override async Task ExecuteAsync(CancellationToken cancellationToken)
+        protected override Task ExecuteAsync(CancellationToken cancellationToken) => ExecuteScheduledTaskWithTimeoutAsync(cancellationToken);
+
+        internal async Task ExecuteScheduledTaskWithTimeoutAsync(CancellationToken cancellationToken)
         {
             if (!_options.Value.Enabled || cancellationToken.IsCancellationRequested)
                 return;
 
-            await ExecuteScheduledTaskWithTimeoutAsync(cancellationToken);
-        }
-
-        internal async Task ExecuteScheduledTaskWithTimeoutAsync(CancellationToken cancellationToken)
-        {
             using var timeOutTokenSource = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);
 
             if (_options.Value.CancelAfter > TimeSpan.Zero)
