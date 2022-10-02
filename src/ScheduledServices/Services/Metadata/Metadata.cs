@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Runtime.ExceptionServices;
 
 namespace ScheduledServices.Services.Metadata
 {
@@ -28,5 +29,10 @@ namespace ScheduledServices.Services.Metadata
         /// The exception that occured during the last failure.
         /// </summary>
         public Exception? Exception { get; internal set; }
+
+        /// <summary>
+        /// The DateTime the exception occured.
+        /// </summary>
+        public DateTime? ExceptionAt { get; internal set;}
     }
 }

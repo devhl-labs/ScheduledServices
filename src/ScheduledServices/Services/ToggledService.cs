@@ -46,6 +46,7 @@ namespace ScheduledServices
             {
                 Metadata.Failures++;
                 Metadata.Exception = e;
+                Metadata.ExceptionAt = DateTime.UtcNow;
                 OnExecutionError(e, cancellationToken);
             }
 
