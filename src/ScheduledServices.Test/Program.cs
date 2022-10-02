@@ -2,6 +2,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Configuration;
 using ScheduledServices.Extensions;
+using System;
 
 namespace ScheduledServices.Test
 {
@@ -9,6 +10,7 @@ namespace ScheduledServices.Test
     {
         public static void Main(string[] args)
         {
+            System.Console.WriteLine($"Started at {DateTime.Now}.");
             CreateHostBuilder(args).Build().Run();
         }
 

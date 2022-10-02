@@ -10,7 +10,7 @@ namespace ScheduledServices.Services.Options
         {
         }
 
-        public ScheduledServiceOptions(bool enabled, TimeSpan delayBeforeExecution) : base(enabled)
+        public ScheduledServiceOptions(bool enabled, TimeSpan delayBeforeExecution, TimeSpan cancelAfter = default) : base(enabled, cancelAfter)
         {
             DelayBeforeExecution = delayBeforeExecution;
         }

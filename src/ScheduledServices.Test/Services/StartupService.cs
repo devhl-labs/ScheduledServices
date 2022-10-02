@@ -17,7 +17,7 @@ namespace ScheduledServices.Test
 
         protected override async Task ExecuteScheduledTaskAsync(CancellationToken cancellationToken)
         {
-            _logger.LogInformation("The startup service is executing.");
+            _logger.LogInformation("The startup service is executing at {dateTime}.", DateTime.Now);
 
             // any async work
             await Task.Delay(TimeSpan.FromSeconds(5), cancellationToken);

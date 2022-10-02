@@ -10,7 +10,7 @@ namespace ScheduledServices.Services.Options
         {
         }
 
-        public RecurringServiceOptions(bool enabled, TimeSpan delayBeforeExecution, TimeSpan delayBetweenExecutions) : base (enabled, delayBeforeExecution)
+        public RecurringServiceOptions(bool enabled, TimeSpan delayBeforeExecution, TimeSpan delayBetweenExecutions, TimeSpan cancelAfter = default) : base (enabled, delayBeforeExecution, cancelAfter)
         {
             DelayBetweenExecutions = delayBetweenExecutions;
         }

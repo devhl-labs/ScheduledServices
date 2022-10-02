@@ -60,7 +60,7 @@ namespace ScheduledServices
 
             await DelayAsync(delay, cancellationToken);
 
-            await base.ExecuteAsync(cancellationToken);
+            await ExecuteScheduledTaskWithTimeoutAsync(cancellationToken);
         }
     }
 }
