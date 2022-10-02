@@ -32,7 +32,7 @@ namespace ScheduledServices
             _logger.LogError(e, "An exception occured while executing service {name}.", GetType().Name);
         }
 
-        private protected async Task SwallowAsync<T>(Func<CancellationToken, T> func, CancellationToken cancellationToken) where T : Task
+        private protected async Task TryExecuteAsync<T>(Func<CancellationToken, T> func, CancellationToken cancellationToken) where T : Task
         {
             Metadata.Start = DateTime.UtcNow;
 
@@ -67,7 +67,7 @@ namespace ScheduledServices
             if (_options.Value.CancelAfter > TimeSpan.Zero)
                 timeOutTokenSource.CancelAfter(_options.Value.CancelAfter);
 
-            await SwallowAsync(ExecuteScheduledTaskAsync, timeOutTokenSource.Token);
+            await TryExecuteAsync(ExecuteScheduledTaskAsync, timeOutTokenSource.Token);
         }
 
         protected virtual void AfterStopped()
