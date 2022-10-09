@@ -29,7 +29,7 @@ namespace ScheduledServices
 
                     await DelayAsync(delayBefore, cancellationToken);
 
-                    _isFirstRun = true;
+                    _isFirstRun = false;
                 }
 
                 await ExecuteScheduledTaskWithTimeoutAsync(cancellationToken);
